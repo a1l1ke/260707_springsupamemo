@@ -32,24 +32,24 @@ sequenceDiagram
     participant Service as MemoService
     participant Repository as MemoRepository
     participant Util as SupabaseUtil
-    database DB as Supabase Cloud
+    participant DB as Supabase Cloud
 
-    Note over User, DB: 1. 메모 저장 흐름 (POST /)
-    User->>DS: POST / (memo="새로운 메모 내용")
+    Note over User, DB: 1. 메모 저장 흐름 (POST)
+    User->>DS: POST / (memo 전송)
     DS->>Controller: memoForm(MemoFormDTO) 호출
     Controller->>Service: save(MemoFormDTO) 호출
-    Note over Service: DTO 데이터를 기반으로<br/>영속성용 MemoEntity 빌드
+    Note over Service: DTO 데이터를 기반으로 영속성용 MemoEntity 빌드
     Service->>Repository: save(MemoEntity) 호출
     Repository->>Util: save(MemoEntity) 호출
-    Note over Util: Jackson을 통해<br/>MemoSupabaseDTO로 직렬화
-    Util->>DB: HTTP POST /rest/v1/memo (with apikey/Bearer Token)
-    DB-->>Util: HTTP 201 Created (or response)
+    Note over Util: Jackson을 통해 MemoSupabaseDTO로 직렬화
+    Util->>DB: HTTP POST /rest/v1/memo (API Key 포함)
+    DB-->>Util: HTTP 201 Created 응답
     Util-->>Repository: void 반환
     Repository-->>Service: void 반환
     Service-->>Controller: void 반환
     Controller-->>User: 302 Redirect (redirect:/)
     
-    Note over User, DB: 2. 리다이렉트 후 화면 조회 흐름 (GET /)
+    Note over User, DB: 2. 리다이렉트 후 화면 조회 흐름 (GET)
     User->>DS: GET /
     DS->>Controller: home(Model) 호출
     Controller->>Service: findAll() 호출
@@ -57,14 +57,14 @@ sequenceDiagram
     Repository->>Util: getAll() 호출
     Util->>DB: HTTP GET /rest/v1/memo
     DB-->>Util: HTTP 200 OK (JSON 리스트 반환)
-    Note over Util: Response JSON을<br/>List<MemoTableDTO>로 변환
-    Util-->>Repository: List<MemoEntity> 반환 (Entity 변환 완료)
+    Note over Util: Response JSON을 List<MemoTableDTO>로 변환
+    Util-->>Repository: List<MemoEntity> 반환 (Entity 변환)
     Repository-->>Service: List<MemoEntity> 반환
-    Note over Service: Entity 스트림을 가공해<br/>화면용 List<MemoViewDTO>로 변환
+    Note over Service: Entity 스트림을 가공해 화면용 List<MemoViewDTO>로 변환
     Service-->>Controller: List<MemoViewDTO> 반환
-    Note over Controller: Model에 "memoList" 담기
-    Controller-->>DS: "home" (뷰 이름 반환)
-    Note over DS: ViewResolver를 거쳐 home.jsp 해석<br/>JSTL c:forEach 동적 루프 실행
+    Note over Controller: Model에 memoList 담기
+    Controller-->>DS: home (뷰 이름 반환)
+    Note over DS: ViewResolver를 거쳐 home.jsp 해석 및 JSTL c:forEach 렌더링
     DS-->>User: 렌더링된 HTML 응답
 ```
 

@@ -1,0 +1,31 @@
+/* assets/style.css */
+h1 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 480px;
+    margin: 0 auto;
+}
+
+textarea {
+    resize: none;
+    height: 240px;
+}
+
+#memoList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 320px;
+    padding: 12px 0;
+    margin: 0 auto;
+}
+
+.memo {
+    border: 1px solid #ccc;
+    padding: 12px;
+}

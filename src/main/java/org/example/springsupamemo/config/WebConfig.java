@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/assets/**")
                 .addResourceLocations("/assets/");
+        // resources, static...
         System.out.println("WebConfig.addResourceHandlers");
     }
 }

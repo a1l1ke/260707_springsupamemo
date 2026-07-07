@@ -23,6 +23,7 @@
     <c:forEach items="${memoList}" var="memo">
         <div class="memo">
             <p>${memo.memo}</p>
+            <p>${memo.createdDate}</p>
         </div>
     </c:forEach>
 </section>

@@ -26,7 +26,11 @@ public class MemoService {
     public List<MemoViewDTO> findAll() {
         return memoRepository.findAll()
                 .stream().map(
-                        memoEntity -> new MemoViewDTO(memoEntity.getMemo())
+//                        memoEntity -> new MemoViewDTO(memoEntity.getMemo())
+                        memoEntity -> new MemoViewDTO(
+                                memoEntity.getMemo(),
+                                memoEntity.getCreatedDate())
+                        // fromEntity
                 )
                 .toList();
     }

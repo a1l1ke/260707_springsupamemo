@@ -1,8 +1,10 @@
 package org.example.springsupamemo.util;
 
 import org.example.springsupamemo.dto.MemoSupabaseDTO;
+import org.example.springsupamemo.dto.MemoTableDTO;
 import org.example.springsupamemo.model.MemoEntity;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
@@ -68,9 +70,14 @@ public class SupabaseUtil {
         try {
             HttpResponse<String> response = client.send(request, handler);
             System.out.println("response = " + response.body());
+            List<MemoTableDTO> list = mapper.readValue(response.body(), new TypeReference<>() {
+            }); // List<MemoTableDTO>.class <- 제너릭 소거 때문에 문법 X.
+            // [{id, created_at, memo}]
+            return list.stream()
+                    .map(MemoTableDTO::toEntity)
+                    .toList();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return List.of();
     }
 }
